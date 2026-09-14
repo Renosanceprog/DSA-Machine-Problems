@@ -158,6 +158,74 @@ class llStk
     }
 };
 
+class llStkUnlimited
+{
+    private:
+    int stkLen;
+    stckNode *topptr;
+    bool isEmpty()
+    {
+        return stkLen == 0;
+    }
+    
+    public:
+    llStkUnlimited()
+    {
+        stkLen = 0;
+        topptr = NULL;
+    }
+    void push(int data)
+    {
+        stckNode *newnode = new stckNode();
+        newnode->data = data;
+        newnode->next = topptr;
+        topptr = newnode;
+        stkLen++;
+        cout<<"pushed "<<data<<" to Stack Successfully.\n";
+    }
+    int pop()
+    {
+        if (isEmpty())
+        {
+            cout<<"could not pop. Stack is Empty.\n";
+            return -1;
+        }
+        int temp = topptr->data;
+        stckNode *q = topptr;
+        topptr = topptr->next;
+        delete(q);
+        stkLen--;
+        cout<<"popped "<<temp<<" to Stack Successfully.\n";
+        return temp;
+    }
+
+    int top()
+    {
+        if (isEmpty())
+        {
+            cout<<"could not top. Stack is Empty.\n";
+            return -1;
+        }
+        cout<<topptr->data<<" is Top Element in the Stack.\n";
+        return topptr->data;
+    }
+
+    void display()
+    {
+        stckNode *walker = topptr;
+        int i = 1;
+        while (walker != NULL)
+        {
+            printf("(node:%2d) - [ %4d ]", i, walker->data);
+            if (i == 1) cout<<"<- Top of Stack";
+            i++;
+            cout<<endl;
+            walker = walker->next;
+        }
+        cout<<endl;
+    }
+};
+
 int menu();
 int methods_menu();
 
@@ -165,12 +233,14 @@ int main(int argc, char const *argv[])
 {
     ArrStk s1 = ArrStk();
     llStk s2 = llStk();
+    llStkUnlimited s3 = llStkUnlimited();
     int main_opt;
+    
     main_menu:
     while (true)
     {
         main_opt = menu();
-        if (main_opt == 1 || main_opt == 2)
+        if (main_opt == 1 || main_opt == 2 || main_opt == 3)
         {
             while (true)
             {
@@ -182,19 +252,23 @@ int main(int argc, char const *argv[])
                     cin>>num;
                     
                     if (main_opt == 1) s1.push(num);
-                    else s2.push(num);
+                    else if (main_opt == 2) s2.push(num);
+                    else s3.push(num);
                     break;
                 case 2:
                     if (main_opt == 1) s1.pop();
-                    else s2.pop();
+                    else if (main_opt == 2) s2.pop();
+                    else s3.pop();
                     break;
                 case 3:
                     if (main_opt == 1) s1.top();
-                    else s2.top();
+                    else if (main_opt == 2) s2.top();
+                    else s3.top();
                     break;
                 case 4:
                     if (main_opt == 1) s1.display();
-                    else s2.display();
+                    else if (main_opt == 2) s2.display();
+                    else s3.display();
                     break;
                 case 0:
                     goto main_menu;
@@ -224,6 +298,7 @@ int menu()
     cout<<"=== Sir Rene's Stack ADT Implementation Demo! ==="<<endl;
     cout<<"[1] Array Stack Implementation"<<endl;
     cout<<"[2] Linked List Stack Implementation"<<endl;
+    cout<<"[3] Unlimited Linked List Stack Implementation"<<endl;
     cout<<"[0] Quit"<<endl;
     cout<<endl<<"Choose Option: ";
     cin>>opt;
